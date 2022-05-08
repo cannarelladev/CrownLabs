@@ -1,5 +1,5 @@
 import { CaretDownOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Dropdown, Menu, Space } from 'antd';
+import { Dropdown, Menu, Progress, Space, Tooltip } from 'antd';
 import Button from 'antd-button-color';
 import { FC, useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -44,6 +44,48 @@ const NavbarMenu: FC<INavbarMenuProps> = ({ ...props }) => {
         trigger={['click']}
         overlay={
           <Menu onClick={handleMenuClick} selectedKeys={[currentPath]}>
+            <Menu.Item
+              key="resourcequotas"
+              className="text-center cursor-default"
+              disabled={true}
+            >
+              <div className="my-1 flex justify-around">
+                <Tooltip title="Virtual CPU usage" placement="bottom">
+                  <Progress
+                    type="circle"
+                    format={p => <div>{`CPU\n${p}%`}</div>}
+                    percent={100}
+                    status="active"
+                    strokeColor={'#a61d24'}
+                    width={50}
+                    strokeWidth={10}
+                  />
+                </Tooltip>
+                <Tooltip title="Memory usage" placement="bottom">
+                  <Progress
+                    type="circle"
+                    percent={70}
+                    status="active"
+                    format={p => <div>{`RAM\n${p}%`}</div>}
+                    width={50}
+                    strokeWidth={10}
+                  />
+                </Tooltip>
+                <Tooltip title="Instances used" placement="bottom">
+                  <Progress
+                    type="circle"
+                    percent={75}
+                    width={50}
+                    status="active"
+                    format={() => (
+                      <div className="align-middle text-center">5/5</div>
+                    )}
+                    strokeWidth={10}
+                  />
+                </Tooltip>
+              </div>
+            </Menu.Item>
+            <Menu.Divider />
             <Menu.Item
               key="welcome"
               className="pointer-events-none text-center"

@@ -1,5 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Col, Space } from 'antd';
+import { Col, Progress, Space, Tooltip } from 'antd';
 import Button from 'antd-button-color';
 import { FC, useEffect, useState } from 'react';
 import { User, WorkspaceRole } from '../../../utils';
@@ -95,15 +95,6 @@ const ActiveView: FC<IActiveViewProps> = ({ ...props }) => {
       />
       <Box
         header={{
-          center: !managerView ? (
-            <div className="h-full flex justify-center items-center px-5">
-              <p className="md:text-2xl text-lg text-center mb-0">
-                <b>Active Instances</b>
-              </p>
-            </div>
-          ) : (
-            ''
-          ),
           size: 'middle',
           right: managerView && (
             <div className="h-full flex justify-center items-center pr-10">
@@ -115,21 +106,63 @@ const ActiveView: FC<IActiveViewProps> = ({ ...props }) => {
               </Space>
             </div>
           ),
-          left: managerView && currentView === WorkspaceRole.manager && (
-            <div className="h-full flex justify-center items-center pl-6 gap-4">
-              <Toolbox
-                setSearchField={setSearchField}
-                setExpandAll={setExpandAll}
-                setCollapseAll={setCollapseAll}
-                showAdvanced={showAdvanced}
-                setShowAdvanced={setShowAdvanced}
-                showCheckbox={showCheckbox}
-                setShowCheckbox={displayCheckbox}
-                setShowAlert={setShowAlert}
-                selectiveDestroy={selectiveDestroy}
-                deselectAll={deselectAll}
-              />
-            </div>
+          left: (
+            <>
+              {managerView && currentView === WorkspaceRole.manager ? (
+                <div className="h-full flex justify-center items-center pl-6 gap-4">
+                  <Toolbox
+                    setSearchField={setSearchField}
+                    setExpandAll={setExpandAll}
+                    setCollapseAll={setCollapseAll}
+                    showAdvanced={showAdvanced}
+                    setShowAdvanced={setShowAdvanced}
+                    showCheckbox={showCheckbox}
+                    setShowCheckbox={displayCheckbox}
+                    setShowAlert={setShowAlert}
+                    selectiveDestroy={selectiveDestroy}
+                    deselectAll={deselectAll}
+                  />
+                </div>
+              ) : (
+                <div className="h-full flex justify-center items-center pl-6 gap-4">
+                  <Tooltip title="Virtual CPU usage" placement="bottom">
+                    <Progress
+                      type="circle"
+                      format={p => <div>{`CPU\n${p}%`}</div>}
+                      percent={100}
+                      status="active"
+                      strokeColor={'#a61d24'}
+                      width={50}
+                      strokeWidth={10}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Memory usage" placement="bottom">
+                    <Progress
+                      type="circle"
+                      percent={70}
+                      status="active"
+                      format={p => <div>{`RAM\n${p}%`}</div>}
+                      width={50}
+                      strokeWidth={10}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Instances used" placement="bottom">
+                    <Progress
+                      type="circle"
+                      percent={(4 / 5) * 100}
+                      width={50}
+                      status="active"
+                      format={p => (
+                        <div className="align-middle text-center">
+                          {(p! / 100) * 5}/5
+                        </div>
+                      )}
+                      strokeWidth={10}
+                    />
+                  </Tooltip>
+                </div>
+              )}
+            </>
           ),
         }}
       >

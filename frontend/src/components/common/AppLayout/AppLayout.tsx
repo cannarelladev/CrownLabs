@@ -1,5 +1,5 @@
 import { InfoOutlined } from '@ant-design/icons';
-import { Col, Layout, Result, Row } from 'antd';
+import { Col, Layout, Progress, Result, Row, Tooltip } from 'antd';
 import { FC, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { logout } from '../../../contexts/AuthContext';
@@ -56,7 +56,7 @@ const AppLayout: FC<IAppLayoutProps> = ({ ...props }) => {
             </Route>
           </Switch>
         </Content>
-        <div className="left-TooltipButton">
+        <div className="right-TooltipButton flex">
           <TooltipButton
             TooltipButtonData={{
               tooltipTitle: 'Show CrownLabs infos',
@@ -66,10 +66,9 @@ const AppLayout: FC<IAppLayoutProps> = ({ ...props }) => {
             }}
             onClick={() => setSideLeftShow(true)}
           />
-        </div>
-        {TooltipButtonData && (
-          <div className="right-TooltipButton">
+          {TooltipButtonData && (
             <TooltipButton
+              className="ml-4"
               TooltipButtonData={{
                 tooltipTitle: TooltipButtonData.tooltipTitle,
                 tooltipPlacement: TooltipButtonData.tooltipPlacement,
@@ -78,8 +77,42 @@ const AppLayout: FC<IAppLayoutProps> = ({ ...props }) => {
               }}
               onClick={() => window.open(TooltipButtonLink, '_blank')}
             />
-          </div>
-        )}
+          )}
+        </div>
+
+        <div className="left-TooltipButton flex justify-between w-40">
+          <Tooltip title="Virtual CPU usage" placement="topLeft">
+            <Progress
+              type="circle"
+              format={p => <div>{`CPU\n${p}%`}</div>}
+              percent={100}
+              status="active"
+              strokeColor={'#a61d24'}
+              width={43}
+              strokeWidth={10}
+            />
+          </Tooltip>
+          <Tooltip title="Memory usage" placement="top">
+            <Progress
+              type="circle"
+              percent={70}
+              status="active"
+              format={p => <div>{`RAM\n${p}%`}</div>}
+              width={43}
+              strokeWidth={10}
+            />
+          </Tooltip>
+          <Tooltip title="Instances used" placement="top">
+            <Progress
+              type="circle"
+              percent={75}
+              width={43}
+              status="active"
+              format={() => <div className="align-middle text-center">5/5</div>}
+              strokeWidth={10}
+            />
+          </Tooltip>
+        </div>
       </Layout>
       <SidebarInfo
         show={sideLeftShow}
